@@ -21,13 +21,23 @@ router.get('/', asyncHandler(async(req,res)=>{
 
 /* GET New book */
 router.get('/new', (req,res) => {
-  res.render('new-book')
+  res.render('new-book', {books: {}, errors: false})
 })
 
 /* POST New book */
 router.post('/new', asyncHandler(async(req,res)=> {
-  const newBook = await Book.create(req.body)
-  res.redirect(`/books/${newBook.id}`)
+  let book;
+  try {
+    const newBook = await Book.create(req.body)
+    res.redirect(`/books/${newBook.id}`)
+  } catch (error) {
+    if(error.name === "SequelizeValidationError") {
+      book = await Book.build(req.body)
+      res.render('new-book', {book, errors: error.errors})
+    } else {
+      throw error
+    }
+  }
 }))
 
 /* GET Single book "Update" */

@@ -46,8 +46,8 @@ router.get('/:id', asyncHandler(async(req,res,next)=>{
   if(book){
     res.render('update-book', {book, errors: false}) // adding SequelizeValidationError 
   } else {
-    res.status(404)
-    next(); // added method to handle non-existent book id
+    res.status(404) // changing it to use the global
+    next();
   }
 }))
 

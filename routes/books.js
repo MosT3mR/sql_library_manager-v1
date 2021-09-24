@@ -43,14 +43,27 @@ router.post('/new', asyncHandler(async(req,res)=> {
 /* GET Single book "Update" */
 router.get('/:id', asyncHandler(async(req,res)=>{
   const book = await Book.findByPk(req.params.id)
-  res.render('update-book', {book})
+  if(book){
+    res.render('update-book', {book, errors: false}) // adding SequelizeValidationError 
+  } else {
+    res.render('page-not-found'); // added method to handle non-existent book id
+  }
 }))
 
 /* POST Single book "Update" */
 router.post('/:id', asyncHandler(async(req,res)=>{
-  const book = await Book.findByPk(req.params.id)
-  await book.update(req.body)
-  res.redirect('/books')
+  try {
+    const book = await Book.findByPk(req.params.id)
+    await book.update(req.body)
+    res.redirect('/books')
+  } catch (error) {
+    if(error.name === "SequelizeValidationError") { // added the validator to the update
+      const book = await Book.findByPk(req.params.id)
+      res.render('update-book', {book, errors: error.errors})
+  } else {
+    throw console.error();
+  }
+}
 }))
 
 /* POST DELETE Single book */

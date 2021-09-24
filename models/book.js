@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: '"Title" is requierd'
+          msg: '"Title" is required'
         }
       }
     },
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: '"Title" is requierd'
+          msg: '"Author" is required' // fixing the first issue (typo)
         }
       }
     },

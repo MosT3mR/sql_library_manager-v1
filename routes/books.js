@@ -41,12 +41,13 @@ router.post('/new', asyncHandler(async(req,res)=> {
 }))
 
 /* GET Single book "Update" */
-router.get('/:id', asyncHandler(async(req,res)=>{
+router.get('/:id', asyncHandler(async(req,res,next)=>{
   const book = await Book.findByPk(req.params.id)
   if(book){
     res.render('update-book', {book, errors: false}) // adding SequelizeValidationError 
   } else {
-    res.render('page-not-found'); // added method to handle non-existent book id
+    res.status(404)
+    next(); // added method to handle non-existent book id
   }
 }))
 

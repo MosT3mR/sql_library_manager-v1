@@ -48,6 +48,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   if(err.status === 404){
     res.render('page-not-found')
+    // console.log('global')
   } else {
     res.status(err.status || 500);
     res.render('error');
